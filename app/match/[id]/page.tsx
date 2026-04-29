@@ -34,11 +34,12 @@ export default function MatchPage() {
     );
   }
 
-  const { home, away } = getMatchTeams(match);
+  const activeMatch = match;
+  const { home, away } = getMatchTeams(activeMatch);
   const kickoff = new Intl.DateTimeFormat("en", {
     dateStyle: "full",
     timeStyle: "short"
-  }).format(new Date(match.kickoff));
+  }).format(new Date(activeMatch.kickoff));
 
   async function savePrediction(event: FormEvent) {
     event.preventDefault();
@@ -46,7 +47,7 @@ export default function MatchPage() {
     const predictedAwayScore = Number(awayScore);
     const { data } = await supabase.auth.getSession();
     const payload = {
-      match_id: match.id,
+      match_id: activeMatch.id,
       predicted_winner_id: winner,
       predicted_home_score: Number.isFinite(predictedHomeScore) ? predictedHomeScore : null,
       predicted_away_score: Number.isFinite(predictedAwayScore) ? predictedAwayScore : null,
@@ -78,7 +79,7 @@ export default function MatchPage() {
     <AppShell>
       <section className="grid gap-5 lg:grid-cols-[1fr_0.8fr]">
         <Card className="bg-pitch p-6 text-white">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">{match.venue}</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">{activeMatch.venue}</p>
           <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-4 text-center">
             <div>
               <div className="text-6xl">{home?.flag}</div>
@@ -95,7 +96,7 @@ export default function MatchPage() {
         <Card>
           <h2 className="text-xl font-black">3 things to know</h2>
           <ul className="mt-4 space-y-3">
-            {match.facts.map((fact) => (
+            {activeMatch.facts.map((fact) => (
               <li key={fact} className="rounded-md bg-slate-100 p-3 text-sm font-medium text-slate-700">
                 {fact}
               </li>
