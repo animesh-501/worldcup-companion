@@ -73,7 +73,7 @@ export default function GroupsPage() {
         totals.set(row.user_id, (totals.get(row.user_id) ?? 0) + (row.points_earned ?? 0));
       });
 
-      const rows = [...totals.entries()]
+      const rows = Array.from(totals.entries())
         .map(([userId, points]) => {
           const profile = profiles.get(userId);
           return {
